@@ -36,8 +36,15 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',  
-    'fedst7_app.adminpanel',  # <- ini yang benar
+    'django.contrib.staticfiles',
+
+    # Apps buatan tim
+    'fedst7_app',
+    'usecase_farhan',
+    'usecase_kartika',
+    'usecase_miko',
+    'usecase_nada',
+    'usecase_najla',
 ]
 
 
@@ -53,18 +60,16 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'final_exam_data_science_tim_7.urls'
 
-STATICFILES_DIRS = [
-    BASE_DIR / "fedst7_app" / "static",
-]
 
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'fedst7_app' / 'templates'],
+        'DIRS': [],  # Kosongkan, karena semua template ada di folder 'templates' masing-masing app
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
@@ -127,6 +132,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.2/howto/static-files/
 
 STATIC_URL = 'static/'
+
+STATICFILES_DIRS = [
+    BASE_DIR / "fedst7_app" / "static",
+]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
