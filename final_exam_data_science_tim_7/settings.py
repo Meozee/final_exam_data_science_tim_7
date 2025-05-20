@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'fedst7_app'
+    'fedst7_app',
+    'najla_app'
 ]
 
 MIDDLEWARE = [
@@ -78,7 +79,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'dbexam',
         'USER': 'postgres',
-        'PASSWORD': 'DBmiko',
+        'PASSWORD': 'pureblood',
         'HOST': 'localhost',
         'PORT': '5432',
     }
