@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'fedst7_app',
-    'main_app',
+    'usecase_miko',
 ]
 
 MIDDLEWARE = [
@@ -54,14 +54,14 @@ MIDDLEWARE = [
 ROOT_URLCONF = 'final_exam_data_science_tim_7.urls'
 
 STATICFILES_DIRS = [
-    BASE_DIR / "main_app" / "static",
+    BASE_DIR / "fedst7_app" / "static",
 ]
 
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'main_app' / 'templates'],
+        'DIRS': [BASE_DIR / 'fedst7_app' / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
