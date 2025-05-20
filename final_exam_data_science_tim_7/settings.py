@@ -37,8 +37,6 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-
-    # Apps buatan tim
     'fedst7_app',
     'usecase_farhan',
     'usecase_kartika',
