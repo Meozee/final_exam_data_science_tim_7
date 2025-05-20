@@ -36,10 +36,10 @@ INSTALLED_APPS = [
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'fedst7_app',
-    'usecase_miko',
+    'django.contrib.staticfiles',  
+    'fedst7_app.adminpanel',  # <- ini yang benar
 ]
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
