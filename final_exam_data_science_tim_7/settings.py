@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'fedst7_app',
-    'najla_app'
+    'main_app',
 ]
 
 MIDDLEWARE = [

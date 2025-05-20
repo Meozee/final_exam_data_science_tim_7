@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class UsecaseMikoConfig(AppConfig):
+class Fedst7AppConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'usecase_miko'
+    name = 'fedst7_app'
