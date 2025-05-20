@@ -53,10 +53,15 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = 'final_exam_data_science_tim_7.urls'
 
+STATICFILES_DIRS = [
+    BASE_DIR / "main_app" / "static",
+]
+
+
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'main_app' / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
