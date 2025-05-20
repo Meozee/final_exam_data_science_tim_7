@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container" style="max-width: 600px; margin: 2rem auto;">
+    <h2>Hasil Prediksi Nilai Akhir</h2>
+
+    <div style="margin-top: 1rem; padding: 1rem; background-color: #f0f8ff; border: 1px solid #ddd;">
+        <p>Nilai akhir yang diprediksi:</p>
+        <h1 style="font-size: 2.5rem; color: #2e8b57;">{{ prediction }}</h1>
+    </div>
+
+    <div style="margin-top: 2rem;">
+        <h3>📊 Evaluasi Model (dummy)</h3>
+        <ul>
+            <li><strong>MAE</strong> (Mean Absolute Error): {{ mae }}</li>
+            <li><strong>RMSE</strong> (Root Mean Squared Error): {{ rmse }}</li>
+        </ul>
+    </div>
+
+    {% if coef_info %}
+    <div style="margin-top: 2rem;">
+        <h3>📈 Bobot Fitur (Koefisien Model Regresi)</h3>
+        <p>Koefisien menunjukkan seberapa besar pengaruh masing-masing fitur terhadap prediksi nilai akhir:</p>
+        <ul>
+            {% for name, weight in coef_info %}
+                <li><strong>{{ name }}</strong>: {{ weight|floatformat:2 }}</li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    <div style="margin-top: 2rem;">
+        <a href="{% url 'predict_score' %}" class="btn btn-primary">🔁 Coba Lagi</a>
+    </div>
+</div>
+{% endblock %}
