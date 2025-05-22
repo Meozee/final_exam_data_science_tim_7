@@ -1,51 +1,82 @@
-from django.shortcuts import render
-from .forms import PredictForm
+from cmath import sqrt
 import joblib
-import numpy as np
-import os
-from sklearn.metrics import mean_absolute_error, mean_squared_error
+import pandas as pd
+from django.shortcuts import render
+from django.db import connection
+from .forms import StudentPerformanceForm
 
-def predict_score(request):
+
+def get_data_from_db():
+    with connection.cursor() as cursor:
+        cursor.execute("""
+            SELECT 
+                a.attendance_percentage,
+                MAX(CASE WHEN ass.assessment_type = 'Midterm' THEN ass.score END) AS midterm_score,
+                MAX(CASE WHEN ass.assessment_type = 'Project' THEN ass.score END) AS project_score,
+                cd.difficulty_level,
+                e.grade
+            FROM public.enrollment e
+            JOIN public.attendance a ON e.enroll_id = a.enroll_id
+            JOIN public.assessment ass ON e.enroll_id = ass.enroll_id
+            JOIN public.course_difficulty cd ON e.course_id = cd.course_id
+            GROUP BY e.enroll_id, a.attendance_percentage, cd.difficulty_level, e.grade;
+        """)
+        columns = [col[0] for col in cursor.description]
+        data = cursor.fetchall()
+
+    df = pd.DataFrame(data, columns=columns)
+    df['difficulty_level'] = df['difficulty_level'].map({'Easy': 0, 'Medium': 1, 'Hard': 2})
+    return df
+
+
+def train_and_save_model():
+    df = get_data_from_db()
+
+    from sklearn.model_selection import train_test_split
+    from sklearn.ensemble import RandomForestRegressor
+    from sklearn.metrics import mean_squared_error, r2_score
+    import joblib
+
+    X = df[['attendance_percentage', 'midterm_score', 'project_score', 'difficulty_level']]
+    y = df['grade']
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+    model = RandomForestRegressor(random_state=42)
+    model.fit(X_train, y_train)
+
+    y_pred = model.predict(X_test)
+    rmse = sqrt(mean_squared_error(y_test, y_pred))
+    r2 = r2_score(y_test, y_pred)
+
+    print(f"Model Trained - RMSE: {rmse:.2f}, R²: {r2:.2f}")
+
+    joblib.dump(model, 'usecase_miko/model/student_grade_model.pkl')
+
+
+def predict_student_performance(request):
     prediction = None
-    mae = None
-    rmse = None
-    coef_info = []
-
     if request.method == 'POST':
-        form = PredictForm(request.POST)
+        form = StudentPerformanceForm(request.POST)
         if form.is_valid():
-            data = np.array([[ 
-                form.cleaned_data['attendance'],
-                form.cleaned_data['quiz_score'],
-                form.cleaned_data['midterm_score'],
-                form.cleaned_data['project_score']
-            ]])
+            attendance = int(form.cleaned_data['attendance_percentage'])
+            midterm = int(form.cleaned_data['midterm_score'])
+            project = int(form.cleaned_data['project_score'])
+            difficulty = {'Easy': 0, 'Medium': 1, 'Hard': 2}[form.cleaned_data['difficulty_level']]
 
-            model_path = os.path.join('ml_models', 'miko_grade_predictor.pkl')
-            model = joblib.load(model_path)
-            prediction = model.predict(data)[0]
-
-            # Dummy actual (misal nilai aslinya 80)
-            actual = [80]
-            mae = mean_absolute_error(actual, [prediction])
-            rmse = mean_squared_error(actual, [prediction], squared=False)
-
-            # Koefisien model regresi (jika ada)
             try:
-                coefs = model.coef_
-                features = ['Attendance', 'Quiz', 'Midterm', 'Project']
-                coef_info = zip(features, coefs)
-            except AttributeError:
-                coef_info = []
+                model = joblib.load('usecase_miko/model/student_grade_model.pkl')
+            except FileNotFoundError:
+                train_and_save_model()
+                model = joblib.load('usecase_miko/model/student_grade_model.pkl')
 
-            return render(request, 'usecase_miko/prediction_result.html', {
-                'form': form,
-                'prediction': round(prediction, 2),
-                'mae': round(mae, 2),
-                'rmse': round(rmse, 2),
-                'coef_info': coef_info,
-            })
+            prediction = model.predict([[attendance, midterm, project, difficulty]])[0]
+
     else:
-        form = PredictForm()
+        form = StudentPerformanceForm()
 
-    return render(request, 'usecase_miko/input_student_score.html', {'form': form})
+    context = {
+        'form': form,
+        'prediction': round(prediction, 2) if prediction else None
+    }
+    return render(request, 'usecase_miko/predict.html', context)

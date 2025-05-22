@@ -1,8 +1,6 @@
-
-# usecase_miko/urls.py
-from django.urls import include, path
+from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('predict/', views.predict_score, name='predict_score'),
+    path('', views.predict_student_performance, name='predict_student_performance'),
 ]
