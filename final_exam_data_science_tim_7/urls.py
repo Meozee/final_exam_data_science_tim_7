@@ -23,7 +23,10 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('fedst7_app.urls')),
     path('miko/', include('usecase_miko.urls')),
-
+    path('kartika/', include('usecase_kartika.urls')),
+    path('farhan/', include('usecase_farhan.urls')),
+    path('nada/', include('usecase_nada.urls')),
+    path('najla/', include('usecase_najla.urls')),
 ]
 
 urlpatterns += static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS[0])
