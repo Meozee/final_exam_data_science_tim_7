@@ -1,2 +1,4 @@
-# fedst7_app/forms.py
-# Saat ini tidak ada form di app ini
+from django import forms
+
+class DummyForm(forms.Form):
+    name = forms.CharField()

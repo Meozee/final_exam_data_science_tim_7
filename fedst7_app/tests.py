@@ -1,4 +1,3 @@
-# fedst7_app/tests.py
 from django.test import TestCase
 
-# Create your tests here.
+# Tambahkan test di sini jika diperlukan

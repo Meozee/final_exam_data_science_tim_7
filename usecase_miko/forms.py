@@ -26,3 +26,11 @@ class StudentPerformanceForm(forms.Form):
         choices=DIFFICULTY_LEVELS,
         label="Course Difficulty"
     )
+
+class InstructorForm(forms.Form):
+    instructor_id = forms.IntegerField(label='Instructor ID')
+    semester = forms.IntegerField(label='Semester')
+    num_students = forms.IntegerField(label='Jumlah Mahasiswa')
+    avg_midterm = forms.FloatField(label='Rata-rata UTS')
+    avg_quiz = forms.FloatField(label='Rata-rata Kuis')
+    avg_project = forms.FloatField(label='Rata-rata Proyek')

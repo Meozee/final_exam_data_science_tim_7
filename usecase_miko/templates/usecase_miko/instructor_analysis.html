@@ -1,0 +1,54 @@
+{% extends 'fedst7_app/base.html' %}
+
+{% block content %}
+<h2>👨‍🏫 Analisis Performa Instruktur</h2>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Prediksi Performa Kelas</button>
+</form>
+
+{% if error %}
+    <div class="alert alert-danger mt-3">{{ error }}</div>
+{% endif %}
+
+{% if prediction %}
+    <div class="mt-4">
+        <h4>📊 Hasil Prediksi</h4>
+        <p><strong>Rata-rata Nilai Akhir Kelas:</strong> {{ prediction }}</p>
+
+        <h5>📈 Evaluasi Model</h5>
+        <ul>
+            <li>MAE: {{ mae }}</li>
+            <li>RMSE: {{ rmse }}</li>
+        </ul>
+
+        <h5>📊 Grafik Performa Instruktur</h5>
+        <canvas id="performanceChart" width="400" height="200"></canvas>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        const ctx = document.getElementById('performanceChart').getContext('2d');
+        const chart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: {{ chart_labels|safe }},
+                datasets: [{
+                    label: 'Rata-rata Nilai',
+                    data: {{ chart_values|safe }},
+                    backgroundColor: 'rgba(54, 162, 235, 0.6)',
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false },
+                    title: { display: true, text: 'Performa Tiap Semester' }
+                }
+            }
+        });
+    </script>
+{% endif %}
+{% endblock %}

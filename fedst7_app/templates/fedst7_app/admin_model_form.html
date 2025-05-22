@@ -1,13 +1,9 @@
 {% extends 'fedst7_app/base.html' %}
-
 {% block content %}
-<h2>➕ Tambah Model ML Baru</h2>
-
-<form method="post" enctype="multipart/form-data" class="mt-4">
+<h2>📝 Admin - Upload Model</h2>
+<form method="post" enctype="multipart/form-data">
     {% csrf_token %}
     {{ form.as_p }}
-
-    <button type="submit" class="btn btn-primary">Simpan Model</button>
-    <a href="{% url 'admin_model_list' %}" class="btn btn-secondary">Kembali</a>
+    <button type="submit" class="btn btn-primary">Upload Model</button>
 </form>
 {% endblock %}
