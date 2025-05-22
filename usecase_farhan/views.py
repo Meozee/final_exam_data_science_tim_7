@@ -1,7 +1,5 @@
-from django.shortcuts import render
-from fedst7_app.models import Student, Enrollment, Assessment, Attendance, Course, CourseDifficulty
+# usecase_xxx/views.py
+from django.http import HttpResponse
 
-# Coba ambil 1 data
-Enrollment.objects.first()
-
-# Create your views here.
+def placeholder(request):
+    return HttpResponse("This is a placeholder for {{ nama anggota }}'s app.")

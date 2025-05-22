@@ -1,0 +1,19 @@
+{% extends 'fedst7_app/base.html' %}
+
+{% block content %}
+<h2>📊 Hasil Prediksi / Evaluasi</h2>
+
+<p><strong>Prediksi:</strong> {{ prediction }}</p>
+
+{% if evaluation %}
+    <h4>Evaluasi Model:</h4>
+    <ul>
+        <li>MAE: {{ evaluation.mae }}</li>
+        <li>RMSE: {{ evaluation.rmse }}</li>
+        <li>Accuracy: {{ evaluation.accuracy }}</li>
+        <li>F1 Score: {{ evaluation.f1 }}</li>
+    </ul>
+{% endif %}
+
+<a href="{{ back_url }}" class="btn btn-primary mt-3">🔁 Coba Lagi</a>
+{% endblock %}

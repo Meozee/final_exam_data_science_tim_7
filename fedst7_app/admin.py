@@ -1,3 +1,3 @@
+# fedst7_app/admin.py
 from django.contrib import admin
-
-# Register your models here.
+# belum ada model untuk diregistrasi

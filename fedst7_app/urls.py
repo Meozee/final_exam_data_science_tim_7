@@ -1,6 +1,8 @@
-from django.urls import path, include
+# fedst7_app/urls.py
+from django.urls import path
+from . import views
 
 urlpatterns = [
-    path('', include('fedst7_app.urls')),
-    path('miko/', include('usecase_miko.urls')),  # 🔗 Tambahkan ini
+    path('', views.home, name='home'),           # Homepage
+    path('about/', views.about, name='about'),   # Tentang tim
 ]

@@ -1,7 +1,7 @@
 from django.shortcuts import render
-from fedst7_app.models import Student, Enrollment, Assessment, Attendance, Course, CourseDifficulty
 
-# Coba ambil 1 data
-Enrollment.objects.first()
+def home(request):
+    return render(request, 'fedst7_app/home.html')
 
-# Create your views here.
+def about(request):
+    return render(request, 'fedst7_app/about.html')

@@ -1,0 +1,38 @@
+{% extends 'fedst7_app/base.html' %}
+
+{% block content %}
+<h2>📋 Daftar Model ML</h2>
+
+<table class="table table-striped table-bordered mt-4">
+    <thead class="table-dark">
+        <tr>
+            <th>Nama Model</th>
+            <th>Dibuat Pada</th>
+            <th>Dataset</th>
+            <th>Kreator</th>
+            <th>Use Case</th>
+            <th>Jenis</th>
+            <th>File</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for model in models %}
+        <tr>
+            <td>{{ model.name }}</td>
+            <td>{{ model.created_at }}</td>
+            <td>{{ model.dataset }}</td>
+            <td>{{ model.creator }}</td>
+            <td>{{ model.use_case }}</td>
+            <td>{{ model.model_type }}</td>
+            <td><a href="{{ model.file.url }}" class="btn btn-sm btn-outline-primary">Unduh</a></td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="7" class="text-center text-muted">Belum ada model yang tersedia.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+<a href="{% url 'admin_model_form' %}" class="btn btn-success">➕ Tambah Model</a>
+{% endblock %}

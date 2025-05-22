@@ -87,7 +87,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'dbexam',
         'USER': 'postgres',
-        'PASSWORD': 'pureblood',
+        'PASSWORD': 'DBmiko',
         'HOST': 'localhost',
         'PORT': '5432',
     }
