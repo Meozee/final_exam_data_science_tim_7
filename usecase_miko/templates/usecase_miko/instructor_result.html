@@ -1,0 +1,36 @@
+{% extends "fedst7_app/base.html" %}
+
+{% block title %}Instructor Analysis Results{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow">
+                <div class="card-header bg-success text-white">
+                    <h3 class="mb-0">Analysis Results</h3>
+                </div>
+                <div class="card-body">
+                    <h4 class="mb-4">Input Parameters:</h4>
+                    <ul class="list-group mb-4">
+                        <li class="list-group-item">Teaching Score: {{ teaching_score }}/10</li>
+                        <li class="list-group-item">Student Feedback: {{ student_feedback }}/10</li>
+                        <li class="list-group-item">Completion Rate: {{ completion_rate }}%</li>
+                    </ul>
+                    
+                    <div class="alert alert-info">
+                        <h4 class="alert-heading">Instructor Rating:</h4>
+                        <p class="display-4">{{ rating }}</p>
+                        <hr>
+                        <p class="mb-0">Composite Score: {{ score }}/10</p>
+                    </div>
+                    
+                    <a href="{% url 'usecase_miko:instructor_analysis' %}" class="btn btn-info text-white">
+                        <i class="fas fa-arrow-left mr-2"></i> Analyze Another Instructor
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

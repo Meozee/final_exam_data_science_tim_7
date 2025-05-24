@@ -14,14 +14,31 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
-from django.conf import settings
-from django.conf.urls.static import static
+"""
+URL configuration for final_exam_data_science_tim_7 project.
+
+The `urlpatterns` list routes URLs to views. For more information please see:
+    https://docs.djangoproject.com/en/5.2/topics/http/urls/
+"""
+
 from django.contrib import admin
 from django.urls import path, include
+from django.contrib.auth import views as auth_views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
+    # Auth System
+    path('accounts/login/', auth_views.LoginView.as_view(template_name='fedst7_app/login.html'), name='login'),
+    path('accounts/logout/', auth_views.LogoutView.as_view(), name='logout'),
+
+    # Apps
     path('', include('fedst7_app.urls')),
     path('admin/', admin.site.urls),
+    path('dashboard/', include('userdashboard.urls')), # <-- PASTIKAN BARIS INI ADA
+
+
+    # Team Members' Apps
     path('miko/', include('usecase_miko.urls')),
     path('kartika/', include('usecase_kartika.urls')),
     path('farhan/', include('usecase_farhan.urls')),
@@ -29,4 +46,6 @@ urlpatterns = [
     path('najla/', include('usecase_najla.urls')),
 ]
 
-urlpatterns += static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS[0])
+# Static/media files (only for development)
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,67 +1,7 @@
-{% extends 'fedst7_app/base.html' %}
-{% block title %}User Dashboard{% endblock %}
-
+{% extends "fedst7_app/base.html" %}
+{% block title %}Home{% endblock %}
 {% block content %}
-<div class="container py-4">
-    <div class="text-center mb-5">
-        <h1 class="display-5 fw-bold">Selamat Datang di Final Project Data Science</h1>
-        <p class="lead">
-            Proyek akhir Bootcamp Data Science oleh <strong>Tim 7</strong>, membangun sistem web berbasis machine learning untuk berbagai use case di bidang pendidikan.
-        </p>
-    </div>
-
-    <div class="row mb-4">
-        <div class="col-md-6">
-            <div class="card shadow-sm border-0">
-                <div class="card-body">
-                    <h4 class="card-title">📌 Use Case</h4>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">Prediksi Nilai Akhir Mahasiswa</li>
-                        <li class="list-group-item">Analisis Performa Instruktur</li>
-                        <li class="list-group-item">Identifikasi Mahasiswa Berisiko</li>
-                        <li class="list-group-item">Rekomendasi Beban Mata Kuliah</li>
-                        <li class="list-group-item">Analisis Kesulitan Mata Kuliah</li>
-                        <li class="list-group-item">Prediksi Kehadiran</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-md-6">
-            <div class="card shadow-sm border-0">
-                <div class="card-body">
-                    <h4 class="card-title">🎯 Target Pengguna</h4>
-                    <ul class="list-group list-group-flush">
-                        <li class="list-group-item">Admin Akademik</li>
-                        <li class="list-group-item">Dosen</li>
-                        <li class="list-group-item">Mahasiswa</li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <h2 class="mb-3">🧭 Dashboard Use Case</h2>
-    <div class="row row-cols-1 row-cols-md-2 g-4">
-        <div class="col">
-            <div class="card h-100 border-0 shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title">Use Case 1: Prediksi Nilai Mahasiswa</h5>
-                    <p class="card-text">Masukkan data seperti kehadiran, UTS, project, dan tingkat kesulitan mata kuliah untuk memprediksi nilai akhir.</p>
-                    <a href="{% url 'predict_student_performance' %}" class="btn btn-primary">Lihat Use Case</a>
-                </div>
-            </div>
-        </div>
-
-        <div class="col">
-            <div class="card h-100 border-0 shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title text-muted">Use Case 5: Analisis Performa Instruktur</h5>
-                    <p class="card-text">Analisis pengaruh instruktur terhadap performa kelas.</p>
-                    <button class="btn btn-secondary" disabled>Segera Hadir</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
+    <h1>Selamat Datang di Proyek Analisis Data Pendidikan</h1>
+    <p>Proyek ini bertujuan untuk memanfaatkan data historis akademik untuk membangun model prediktif yang dapat membantu institusi pendidikan. Target pengguna kami adalah staf akademik, penasihat mahasiswa, dan manajemen universitas.</p>
+    <a href="{% url 'userdashboard:dashboard' %}" class="btn btn-primary">Lihat Use Case Kami</a>
 {% endblock %}

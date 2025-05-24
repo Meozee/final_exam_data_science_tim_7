@@ -38,11 +38,14 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'fedst7_app',
+    'adminpanel',
+    'userdashboard',
     'usecase_farhan',
     'usecase_kartika',
-    'usecase_miko',
+    'usecase_miko.apps.UsecaseMikoConfig',
     'usecase_nada',
     'usecase_najla',
+
 ]
 
 
@@ -139,3 +142,11 @@ STATICFILES_DIRS = [
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Auth Settings
+LOGIN_URL = '/accounts/login/'
+LOGIN_REDIRECT_URL = '/dashboard/'
+LOGOUT_REDIRECT_URL = '/home/'
+
+# Tambahkan di TEMPLATES['OPTIONS']['context_processors']
+'django.contrib.auth.context_processors.auth',

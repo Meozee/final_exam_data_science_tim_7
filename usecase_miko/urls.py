@@ -1,8 +1,10 @@
+# usecase_miko/urls.py
+
 from django.urls import path
 from . import views
 
+app_name = 'usecase_miko'
+
 urlpatterns = [
-    path('predict/', views.PredictForm, name='PredictForm'),
-    path('instructor/', views.instructor_analysis, name='instructor_analysis'),
-    path('instructor/classify/', views.instructor_classification, name='instructor_classification'),
+    path('predict-risk/', views.predict_risk_view, name='predict_risk'),
 ]

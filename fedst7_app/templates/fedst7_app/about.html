@@ -1,47 +1,12 @@
-{% extends 'fedst7_app/base.html' %}
-
+{% extends "fedst7_app/base.html" %}
+{% block title %}About Us{% endblock %}
 {% block content %}
-<h1>👥 Tentang Tim 7</h1>
-
-<p>Berikut adalah anggota tim beserta tanggung jawabnya dalam proyek:</p>
-
-<table class="table table-bordered mt-4">
-    <thead class="table-dark">
-        <tr>
-            <th>Nama</th>
-            <th>Use Case</th>
-            <th>Jobdesk</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td><strong>🔵 Miko</strong></td>
-            <td>Use Case 1 & 5</td>
-            <td>Model regresi prediksi nilai akhir, dashboard instruktur</td>
-        </tr>
-        <tr>
-            <td><strong>🔴 Kartika</strong></td>
-            <td>Use Case 2 & 8</td>
-            <td>Model klasifikasi at-risk student, sistem rekomendasi</td>
-        </tr>
-        <tr>
-            <td><strong>🟡 Farhan</strong></td>
-            <td>Use Case 3 & 9</td>
-            <td>Klasifikasi kesulitan mata kuliah, analisis jenis penilaian</td>
-        </tr>
-        <tr>
-            <td><strong>🟢 Nada</strong></td>
-            <td>Use Case 4 & 10</td>
-            <td>Clustering pola performa, analisis tren semester</td>
-        </tr>
-        <tr>
-            <td><strong>🟣 Najla</strong></td>
-            <td>Use Case 6 & 7</td>
-            <td>Prediksi kehadiran, perbandingan performa departemen</td>
-        </tr>
-    </tbody>
-</table>
-
-<p class="text-muted">Setiap anggota bertanggung jawab atas model dan UI use case masing-masing, dan seluruh komponen akan digabung ke dalam satu dashboard utama.</p>
-
+    <h1>Tim 7</h1>
+    <p>Kami adalah kelompok mahasiswa yang bersemangat tentang data science...</p>
+    <div class="row">
+        <div class="col-md-4">
+            <h5>Miko</h5>
+            <p><strong>Role:</strong> Lead ML Engineer (Use Case: Student Risk). Bertanggung jawab atas pengembangan model prediksi risiko mahasiswa dan integrasinya.</p>
+        </div>
+        </div>
 {% endblock %}

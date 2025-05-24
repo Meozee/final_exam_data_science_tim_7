@@ -1,13 +1,11 @@
+# fedst7_app/views.py
+
 from django.shortcuts import render
 
-def home(request):
+def home_view(request):
+    """Menampilkan halaman utama (home page)."""
     return render(request, 'fedst7_app/home.html')
 
-def about(request):
+def about_view(request):
+    """Menampilkan halaman tentang kami (about page)."""
     return render(request, 'fedst7_app/about.html')
-
-def user_dashboard(request):
-    return render(request, 'fedst7_app/user_dashboard.html')
-
-def result(request):
-    return render(request, 'fedst7_app/result.html')
