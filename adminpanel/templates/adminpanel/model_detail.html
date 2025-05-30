@@ -1,0 +1,64 @@
+{% extends "fedst7_app/base.html" %}
+
+{% block title %}Model Details - {{ model.name }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h2>{{ model.name }}</h2>
+                <span class="badge model-type-badge">{{ model.model_type }}</span>
+            </div>
+            <div class="card-body">
+                <div class="mb-4">
+                    <h5>Description</h5>
+                    <p>{{ model.description }}</p>
+                </div>
+                
+                <div class="mb-4">
+                    <h5>Use Case</h5>
+                    <p>{{ model.use_case }}</p>
+                </div>
+                
+                <div class="row mb-4">
+                    <div class="col-md-6">
+                        <h5>Model Details</h5>
+                        <ul class="list-group">
+                            <li class="list-group-item">
+                                <strong>Creator:</strong> {{ model.creator.username }}
+                            </li>
+                            <li class="list-group-item">
+                                <strong>Created:</strong> {{ model.created_at|date:"Y-m-d" }}
+                            </li>
+                            <li class="list-group-item">
+                                <strong>Accuracy:</strong> 
+                                {% if model.accuracy %}
+                                {{ model.accuracy|floatformat:2 }}
+                                {% else %}
+                                N/A
+                                {% endif %}
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <h5>Model File</h5>
+                        <div class="alert alert-info">
+                            {% if model.model_file %}
+                            <a href="{{ model.model_file.url }}" class="btn btn-sm btn-primary">Download Model</a>
+                            {% else %}
+                            No model file uploaded
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="d-flex justify-content-between">
+                    <a href="{% url 'fedst7_app:model_predict' model.pk %}" class="btn btn-primary">Make Prediction</a>
+                    <a href="{% url 'fedst7_app:model_list' %}" class="btn btn-secondary">Back to List</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

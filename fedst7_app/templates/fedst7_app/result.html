@@ -1,0 +1,48 @@
+{% extends "fedst7_app/base.html" %}
+
+{% block title %}Prediction Result - {{ model.name }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="card">
+            <div class="card-header">
+                <h2>Prediction Result</h2>
+            </div>
+            <div class="card-body">
+                <div class="mb-4">
+                    <h5>Model Used</h5>
+                    <p>{{ model.name }} ({{ model.model_type }})</p>
+                </div>
+                
+                <div class="mb-4">
+                    <h5>Input Data</h5>
+                    <pre class="bg-light p-3">{{ input_data|pprint }}</pre>
+                </div>
+                
+                <div class="mb-4">
+                    <h5>Prediction Result</h5>
+                    <div class="alert alert-success">
+                        {% if prediction is not None %}
+                            {% if model.model_type == 'classification' %}
+                            Predicted Class: <strong>{{ prediction }}</strong>
+                            {% elif model.model_type == 'regression' %}
+                            Predicted Value: <strong>{{ prediction|floatformat:2 }}</strong>
+                            {% else %}
+                            Prediction: <strong>{{ prediction }}</strong>
+                            {% endif %}
+                        {% else %}
+                        No prediction result available
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <div class="d-flex justify-content-between">
+                    <a href="{% url 'fedst7_app:model_predict' model.pk %}" class="btn btn-primary">New Prediction</a>
+                    <a href="{% url 'fedst7_app:model_detail' model.pk %}" class="btn btn-secondary">Back to Model</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

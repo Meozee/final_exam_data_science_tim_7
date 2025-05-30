@@ -1,0 +1,39 @@
+{% extends "fedst7_app/base.html" %}
+{% block title %}Input Deteksi Anomali{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Input Data untuk Deteksi Anomali Akademik</h2>
+    <p>Masukkan detail penilaian dan informasi terkait untuk dianalisis.</p>
+    <hr>
+    <form method="post" class="mb-5">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-primary mt-3">Analisis Anomali</button>
+    </form>
+    
+    {% if error %}
+        <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+
+    {% if results %}
+    <h3 class="mt-4">Hasil Analisis Anomali</h3>
+    <div class="card">
+        <div class="card-header {% if results.is_anomaly == 'Terdeteksi Anomali' %}bg-danger text-white{% else %}bg-success text-white{% endif %}">
+            Status: {{ results.is_anomaly }}
+        </div>
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item"><strong>Skor Anomali (Estimasi 0-1):</strong> {{ results.anomaly_score_processed }}</li>
+            <li class="list-group-item"><strong>Pola Terdeteksi:</strong> {{ results.flagged_patterns }}</li>
+            <li class="list-group-item"><small>Input Anda (sebagian): 
+                {% for key, value in results.input_values.items %}
+                    {% if key in "score_assessment_1,score_assessment_2,current_attendance_percentage" %} {{ key|title }}: {{ value }};
+                    {% endif %}
+                {% endfor %}
+            </small></li>
+            <li class="list-group-item"><small>Raw Decision Score: {{ results.raw_decision_score }} (semakin kecil/negatif, semakin anomali)</small></li>
+        </ul>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends "fedst7_app/base.html" %}
+
+{% block title %}Model Prediction - {{ model.name }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-lg-8 mx-auto">
+        <div class="card">
+            <div class="card-header">
+                <h2>{{ model.name }} Prediction</h2>
+            </div>
+            <div class="card-body">
+                <p class="mb-4">{{ model.description }}</p>
+                
+                <form method="post" class="prediction-form">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        {{ form.input_data.label_tag }}
+                        {{ form.input_data }}
+                        {% if form.input_data.help_text %}
+                        <small class="form-text text-muted">{{ form.input_data.help_text }}</small>
+                        {% endif %}
+                        {% for error in form.input_data.errors %}
+                        <div class="invalid-feedback d-block">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Make Prediction</button>
+                    <a href="{% url 'fedst7_app:model_detail' model.pk %}" class="btn btn-secondary">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,7 @@
+{% extends "fedst7_app/base.html" %}
+{% block title %}Home{% endblock %}
+{% block content %}
+    <h1>Selamat Datang di Proyek Analisis Data Pendidikan</h1>
+    <p>Proyek ini bertujuan untuk memanfaatkan data historis akademik untuk membangun model prediktif yang dapat membantu institusi pendidikan. Target pengguna kami adalah staf akademik, penasihat mahasiswa, dan manajemen universitas.</p>
+    <a href="{% url 'userdashboard:dashboard' %}" class="btn btn-primary">Lihat Use Case Kami</a>
+{% endblock %}

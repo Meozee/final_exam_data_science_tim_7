@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Recommended Course Load</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<body class="container mt-5">
+    <h2 class="mb-4">Recommended Course Load</h2>
+    <p><strong>Student ID:</strong> {{ student_id }}</p>
+    <p><strong>Recommended Credits:</strong>
+        {% if recommended is not None %}
+            <span class="text-success">{{ recommended }}</span>
+        {% else %}
+            <span class="text-muted">No recommendation available</span>
+        {% endif %}
+    </p>
+    <a href="{% url 'course_load_view' %}" class="btn btn-secondary">Back</a>
+</body>
+</html>

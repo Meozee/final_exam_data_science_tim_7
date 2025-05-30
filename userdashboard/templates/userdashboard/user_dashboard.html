@@ -1,0 +1,24 @@
+{% extends "fedst7_app/base.html" %}
+{% block title %}User Dashboard{% endblock %}
+{% block content %}
+    <h1>Pilih Use Case</h1>
+    <p>Berikut adalah daftar model prediktif yang tersedia. Klik untuk mencoba.</p>
+    <div class="row row-cols-1 row-cols-md-2 g-4 mt-3">
+        {% for model in models %}
+        <div class="col">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">{{ model.name }}</h5>
+                    <h6 class="card-subtitle mb-2 text-muted">Oleh: {{ model.creator }} | Tipe: {{ model.model_type }}</h6>
+                    <p class="card-text">{{ model.description }}</p>
+                    <a href="{% url model.endpoint_url_name %}" class="btn btn-primary">Coba Model Ini</a>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col">
+            <p>Belum ada model yang tersedia. Silakan tambahkan model melalui Admin Panel.</p>
+        </div>
+        {% endfor %}
+    </div>
+{% endblock %}

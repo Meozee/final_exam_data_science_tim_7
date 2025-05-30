@@ -1,0 +1,40 @@
+{% extends "usecase_kartika/base_kartika.html" %}
+
+{% block content %}
+<div class="result-container">
+    <h2>At-Risk Prediction Results</h2>
+    <div id="resultContent">
+        <script>
+            const resultData = JSON.parse(sessionStorage.getItem('riskPrediction'));
+            if (resultData) {
+                const riskClass = resultData.prediction === 'High Risk' ? 'high-risk' : 'low-risk';
+                
+                let featuresHtml = '<h3>Input Features:</h3><ul>';
+                for (const [key, value] of Object.entries(resultData.features)) {
+                    featuresHtml += `<li><strong>${key}:</strong> ${value}</li>`;
+                }
+                featuresHtml += '</ul>';
+                
+                document.write(`
+                    <div class="prediction-result ${riskClass}">
+                        <h3>Prediction: ${resultData.prediction}</h3>
+                        <p>Probability: ${(resultData.probability * 100).toFixed(1)}%</p>
+                        ${featuresHtml}
+                        <div class="risk-meter">
+                            <div class="meter-bar" style="width: ${resultData.probability * 100}%"></div>
+                        </div>
+                        <p class="interpretation">
+                            ${resultData.prediction === 'High Risk' ? 
+                              'This student shows signs of academic risk. Consider intervention strategies.' : 
+                              'This student appears to be on track with their studies.'}
+                        </p>
+                    </div>
+                    <a href="{% url 'at_risk_form' %}" class="back-link">Make Another Prediction</a>
+                `);
+            } else {
+                document.write('<p>No prediction data found. Please submit the prediction form.</p>');
+            }
+        </script>
+    </div>
+</div>
+{% endblock %}

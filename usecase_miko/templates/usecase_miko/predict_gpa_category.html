@@ -1,0 +1,95 @@
+{% extends "fedst7_app/base.html" %}
+{% load static %}
+
+{% block title %}{{ use_case_title }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+  <div class="row justify-content-center">
+    <div class="col-md-9 col-lg-8">
+      
+      <div class="card shadow-sm mb-4">
+        <div class="card-header bg-success text-white">
+          <h2 class="card-title mb-0 text-center">{{ use_case_title }}</h2>
+        </div>
+        <div class="card-body p-4">
+          <p class="text-muted">Masukkan data performa akademik Anda untuk memprediksi kategori IP semester berikutnya.</p>
+          <hr>
+          <form method="post" action="{% url 'usecase_miko:predict_gpa_category' %}">
+            {% csrf_token %}
+            
+            {% for field in form %}
+              <div class="mb-3">
+                {{ field.label_tag }}
+                {{ field }}
+                {% if field.help_text %}
+                  <div id="{{ field.auto_id }}_help" class="form-text small text-muted">{{ field.help_text }}</div>
+                {% endif %}
+                {% if field.errors %}
+                  <div class="invalid-feedback d-block">{{ field.errors|first }}</div>
+                {% endif %}
+              </div>
+            {% endfor %}
+            
+            <div class="d-grid mt-3">
+              <button type="submit" class="btn btn-success btn-lg">
+                <i class="fas fa-bullseye me-2"></i>Prediksi Kategori IP
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      {% if request.method == 'POST' %}
+        {% if error_message %}
+          <div class="alert alert-danger mt-4">
+            <h5 class="alert-heading">Gagal Melakukan Prediksi</h5><hr>
+            <p class="mb-0">{{ error_message }}</p>
+          </div>
+        {% elif prediction_result is not None %}
+          <div class="card shadow-lg mt-4">
+            <div class="card-header bg-primary text-white text-center">
+              <h2 class="card-title mb-0">Hasil Prediksi</h2>
+            </div>
+            <div class="card-body p-4 text-center">
+              {% if student_name %}<h3 class="mb-3">Halo, <strong>{{ student_name }}</strong>!</h3>{% endif %}
+              <p class="lead">Prediksi Kategori Indeks Prestasi (IP) Anda untuk semester berikutnya adalah:</p>
+              <h1 class="display-3 fw-bold">
+                <span class="badge bg-{{ badge_color }}">{{ prediction_result }}</span>
+              </h1>
+              {% if prediction_result == 'Tidak Kurang' %}
+                  <p class="text-muted mt-2">Selamat! Performa Anda diprediksi akan aman dan tidak masuk kategori kurang.</p>
+              {% else %}
+                  <p class="text-muted mt-2"><strong>Perhatian!</strong> Ada indikasi performa Anda akan masuk kategori kurang. Ini adalah saat yang tepat untuk lebih fokus pada studi.</p>
+              {% endif %}
+            </div>
+            
+            {% if model_insights %}
+            <div class="card-footer bg-light">
+              <h5 class="text-info text-center mt-2 mb-3"><i class="fas fa-brain me-2"></i>Model Insights</h5>
+              {% if model_insights_type == 'coefficients' %}
+                <p class="text-muted text-center small">Model menentukan prediksi berdasarkan "bobot" (koefisien) setiap fitur. Koefisien positif menaikkan peluang kategori 'Tidak Kurang', sedangkan negatif menurunkannya.</p>
+              {% else %}
+                <p class="text-muted text-center small">Model menentukan prediksi berdasarkan "tingkat kepentingan" setiap fitur. Semakin tinggi nilainya, semakin besar pengaruhnya.</p>
+              {% endif %}
+              <hr>
+              <div class="p-2">
+                <p class="small mb-1"><strong>Faktor Paling Berpengaruh:</strong></p>
+                <ul class="list-group list-group-flush small">
+                  {% for insight in model_insights|slice:":7" %}
+                  <li class="list-group-item d-flex justify-content-between align-items-center p-1">
+                    {{ insight.name|title }}
+                    <span class="badge bg-info text-dark rounded-pill fs-6">{{ insight.importance|floatformat:3 }}</span>
+                  </li>
+                  {% endfor %}
+                </ul>
+              </div>
+            </div>
+            {% endif %}
+          </div>
+        {% endif %}
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

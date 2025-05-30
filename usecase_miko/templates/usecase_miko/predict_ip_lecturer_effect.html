@@ -1,0 +1,145 @@
+{% extends "fedst7_app/base.html" %}
+{% load static %}
+
+{% block title %}{{ use_case_title }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-10 col-xl-8">
+      
+      <div class="card shadow-sm mb-4">
+        <div class="card-header bg-info text-white"> <h2 class="card-title mb-0 text-center">{{ use_case_title }}</h2>
+        </div>
+        <div class="card-body p-4">
+          {% if disclaimer %}
+            <div class="alert alert-info small" role="alert">
+              <strong>Petunjuk:</strong><br>{{ disclaimer|linebreaksbr }}
+            </div>
+          {% endif %}
+          
+          <p class="text-muted">
+            Model ini mencoba memprediksi IP dengan mempertimbangkan berbagai faktor termasuk aspek dosen. 
+            Masukkan data dari dua semester historis sebelumnya.
+          </p>
+          <p class="text-muted">
+            Contoh: Untuk estimasi IP Semester 4, masukkan data aktual <strong>Semester 2</strong> Anda ke bagian "Data Semester Historis ke-1",
+            dan data aktual <strong>Semester 3</strong> Anda ke bagian "Data Semester Historis ke-2".
+          </p>
+          <hr>
+
+          <form method="post" action="{% url 'usecase_miko:predict_ip_lecturer_effect' %}"> {% csrf_token %}
+            
+            <h5 class="mt-3">Informasi Umum Mahasiswa</h5>
+            {% if form.nama_mahasiswa %} <div class="mb-3">
+                {{ form.nama_mahasiswa.label_tag }}
+                {{ form.nama_mahasiswa }}
+                {% if form.nama_mahasiswa.errors %}<div class="invalid-feedback d-block">{{ form.nama_mahasiswa.errors|first }}</div>{% endif %}
+            </div>
+            {% endif %}
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    {{ form.gender.label_tag }}
+                    {{ form.gender }}
+                    {% if form.gender.errors %}<div class="invalid-feedback d-block">{{ form.gender.errors|first }}</div>{% endif %}
+                </div>
+                <div class="col-md-6 mb-3">
+                    {{ form.dept_id.label_tag }}
+                    {{ form.dept_id }}
+                    {% if form.dept_id.errors %}<div class="invalid-feedback d-block">{{ form.dept_id.errors|first }}</div>{% endif %}
+                </div>
+            </div>
+            <hr>
+
+            <h5 class="mt-4">Data Semester Historis ke-1 (Input)</h5>
+            <div class="row">
+                {% for field in form %}
+                    {% if "_sem_hist1" in field.name %} <div class="col-md-6 col-lg-4 mb-3">
+                        {{ field.label_tag }}
+                        {{ field }}
+                        {% if field.help_text %}<div class="form-text small text-muted">{{ field.help_text }}</div>{% endif %}
+                        {% if field.errors %}<div class="invalid-feedback d-block">{{ field.errors|first }}</div>{% endif %}
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <hr>
+
+            <h5 class="mt-4">Data Semester Historis ke-2 (Input)</h5>
+            <div class="row">
+                {% for field in form %}
+                    {% if "_sem_hist2" in field.name %} <div class="col-md-6 col-lg-4 mb-3">
+                        {{ field.label_tag }}
+                        {{ field }}
+                        {% if field.help_text %}<div class="form-text small text-muted">{{ field.help_text }}</div>{% endif %}
+                        {% if field.errors %}<div class="invalid-feedback d-block">{{ field.errors|first }}</div>{% endif %}
+                    </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            
+            <div class="d-grid mt-4">
+              <button type="submit" class="btn btn-info btn-lg text-white"> <i class="fas fa-user-tie me-2"></i>Prediksi IP (Model Efek Dosen)
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      {% if request.method == 'POST' %}
+        {% if error_message %}
+          <div class="alert alert-danger mt-4">
+            <h5 class="alert-heading">Gagal Melakukan Prediksi</h5><hr>
+            <p class="mb-0">{{ error_message }}</p>
+          </div>
+        {% elif prediction_result is not None %}
+          <div class="card shadow-lg mt-4">
+            <div class="card-header bg-success text-white text-center">
+              <h2 class="card-title mb-0">Hasil Prediksi IP untuk Semester {{ predicting_for_semester_display }}</h2>
+            </div>
+            <div class="card-body p-4 text-center">
+              {% if student_name %}<h3 class="mb-3">Halo, <strong>{{ student_name }}</strong>!</h3>{% endif %}
+              <p class="lead">Estimasi Indeks Prestasi (IP) Anda adalah:</p>
+              <h1 class="display-3 fw-bold text-success">{{ prediction_result }}</h1>
+              <p class="text-muted mt-2"><small>Ini adalah estimasi berdasarkan data yang Anda masukkan. Akurasi model sangat terbatas.</small></p>
+            </div>
+            {% if model_insights %}
+            <div class="card-footer bg-light">
+              <h5 class="text-info text-center mt-2 mb-3">
+                <i class="fas fa-chart-bar me-2"></i>Model Insights 
+                {% if model_insights_type == 'coefficients' %}(Koefisien Model){% else %}(Tingkat Kepentingan Fitur){% endif %}
+              </h5>
+              <p class="text-muted text-center small">
+                {% if model_insights_type == 'coefficients' %}
+                  Koefisien menunjukkan pengaruh setiap fitur terhadap prediksi. Positif menaikkan, negatif menurunkan.
+                {% else %}
+                  Angka menunjukkan seberapa besar kontribusi relatif fitur dalam pembuatan prediksi model.
+                {% endif %}
+              </p><hr>
+              <div class="p-2" style="max-height: 300px; overflow-y: auto;">
+                <p class="small mb-1"><strong>Faktor Paling Berpengaruh (Setelah Transformasi):</strong></p>
+                <ul class="list-group list-group-flush small">
+                  {% for insight in model_insights|slice:":10" %}
+                  <li class="list-group-item d-flex justify-content-between align-items-center p-1">
+                    {{ insight.name }}
+                    <span class="badge 
+                      {% if model_insights_type == 'coefficients' and insight.importance > 0 %} bg-success-subtle text-success-emphasis 
+                      {% elif model_insights_type == 'coefficients' and insight.importance < 0 %} bg-danger-subtle text-danger-emphasis
+                      {% else %} bg-info-subtle text-info-emphasis {% endif %} 
+                      rounded-pill fs-6">
+                      {{ insight.importance|floatformat:4 }}
+                      {% if model_insights_type == 'importances' %}%{% endif %}
+                    </span>
+                  </li>
+                  {% endfor %}
+                </ul>
+              </div>
+            </div>
+            {% endif %}
+          </div>
+        {% endif %}
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}
