@@ -1,12 +1,108 @@
 {% extends "fedst7_app/base.html" %}
-{% block title %}About Us{% endblock %}
+{% load static %} {% block title %}Tentang Kami - Tim 7{% endblock %}
+
 {% block content %}
-    <h1>Tim 7</h1>
-    <p>Kami adalah kelompok mahasiswa yang bersemangat tentang data science...</p>
-    <div class="row">
-        <div class="col-md-4">
-            <h5>Miko</h5>
-            <p><strong>Role:</strong> Lead ML Engineer (Use Case: Student Risk). Bertanggung jawab atas pengembangan model prediksi risiko mahasiswa dan integrasinya.</p>
+<div class="container mt-5 mb-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-10 col-xl-8">
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white text-center">
+                    <h1 class="display-5 mb-0">Tim 7 - EduAnalytics</h1>
+                </div>
+                <div class="card-body p-md-5">
+                    <p class="lead text-center mb-5" style="font-size: 1.25rem;">
+                        Kami adalah Tim 7, sekelompok mahasiswa yang bersemangat dalam menggali potensi data science untuk meningkatkan kualitas dan pemahaman dalam dunia pendidikan. Proyek "EduAnalytics" ini merupakan wujud dedikasi kami untuk menciptakan solusi analitik yang inovatif dan bermanfaat.
+                    </p>
+
+                    <h2 class="text-center mb-4 pb-2 border-bottom">Anggota Tim Kami</h2>
+
+                    <div class="row gy-4">
+                        <div class="col-md-6">
+                            <div class="card h-100 shadow-sm team-member-card">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">Miko</h5>
+                                    <p class="card-text"><strong>Peran:</strong> Koordinator Tim & Lead ML Engineer (Use Case: Student Risk Assessment).</p>
+                                    <p class="card-text text-muted" style="font-size: 0.9rem;">
+                                        Bertanggung jawab atas koordinasi keseluruhan proyek, pengembangan model prediksi risiko kegagalan mahasiswa, serta memastikan integrasi model ke dalam sistem aplikasi.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="card h-100 shadow-sm team-member-card">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">Farhan</h5>
+                                    <p class="card-text"><strong>Peran:</strong> ML Engineer (Use Case: Prediksi IP Semester & Klasifikasi Kesulitan Mata Kuliah).</p>
+                                    <p class="card-text text-muted" style="font-size: 0.9rem;">
+                                        Berfokus pada pengembangan model untuk memprediksi Indeks Prestasi mahasiswa di semester mendatang dan model untuk mengklasifikasikan tingkat kesulitan mata kuliah berdasarkan data historis.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="card h-100 shadow-sm team-member-card">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">Najla</h5>
+                                    <p class="card-text"><strong>Peran:</strong> Data Analyst & ML Engineer (Use Case: Prediksi Kehadiran Mahasiswa).</p>
+                                    <p class="card-text text-muted" style="font-size: 0.9rem;">
+                                        Bertugas dalam analisis data untuk menemukan pola kehadiran mahasiswa dan mengembangkan model prediktif untuk estimasi persentase kehadiran di masa mendatang.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="card h-100 shadow-sm team-member-card">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">Nada</h5>
+                                    <p class="card-text"><strong>Peran:</strong> Data Engineer & Visualization Specialist (Use Case: Analisis Karir Alumni).</p>
+                                    <p class="card-text text-muted" style="font-size: 0.9rem;">
+                                        Fokus pada pengumpulan, pembersihan, dan persiapan data alumni untuk analisis jalur karir, serta merancang visualisasi data yang informatif untuk menampilkan hasil analisis.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="card h-100 shadow-sm team-member-card">
+                                <div class="card-body">
+                                    <h5 class="card-title text-primary">Kartika</h5>
+                                    <p class="card-text"><strong>Peran:</strong> Full-Stack Developer & UI/UX (Use Case: Integrasi Model & Antarmuka Pengguna Risk Assessment).</p>
+                                    <p class="card-text text-muted" style="font-size: 0.9rem;">
+                                        Bertanggung jawab atas pengembangan antarmuka pengguna (UI/UX) untuk semua use case, memastikan pengalaman pengguna yang baik, dan mengintegrasikan model-model machine learning ke dalam aplikasi web Django. Fokus utama pada implementasi antarmuka untuk Risk Assessment.
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="my-5">
+
+                    <div class="text-center">
+                        <p class="text-muted">
+                            Kami percaya bahwa dengan analisis data yang tepat, institusi pendidikan dapat membuat keputusan yang lebih baik untuk mendukung keberhasilan setiap mahasiswanya.
+                        </p>
+                        <p>
+                            Terima kasih telah mengunjungi halaman kami!
+                        </p>
+                    </div>
+                </div>
+            </div>
         </div>
-        </div>
+    </div>
+</div>
+
+<style>
+    .team-member-card .card-title {
+        font-weight: bold;
+    }
+    .team-member-card {
+        transition: transform .2s; /* Animasi saat hover */
+    }
+    .team-member-card:hover {
+        transform: scale(1.03); /* Sedikit membesar saat hover */
+    }
+</style>
 {% endblock %}
