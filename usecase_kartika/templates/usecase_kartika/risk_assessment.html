@@ -1,0 +1,99 @@
+{% extends "fedst7_app/base.html" %} {% load static %}
+{% load kartika_extras %}  {# <--- TAMBAHKAN BARIS INI UNTUK MEMUAT CUSTOM FILTER #}
+
+{% block title %} Penilaian Risiko Mahasiswa - Kartika {% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="card shadow-sm">
+        <div class="card-header bg-danger text-white">
+            <h1 class="h4 mb-0 text-center">Prediksi Risiko Kegagalan Mahasiswa</h1>
+        </div>
+        <div class="card-body">
+            <p class="text-muted text-center">Masukkan data mahasiswa di bawah ini untuk memprediksi kemungkinan risiko kegagalan.</p>
+
+            {% if error_message %}
+                <div class="alert alert-warning" role="alert">
+                    <strong>Perhatian:</strong> {{ error_message }}
+                </div>
+            {% endif %}
+
+            <div class="row">
+                <div class="col-lg-6 mb-4">
+                    <h5 class="mb-3">Form Input Data</h5>
+                    <form method="post" novalidate>
+                        {% csrf_token %}
+                        {% for field in form %}
+                            <div class="form-group mb-3">
+                                <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                                {{ field }}
+                                {% if field.help_text %}<small class="form-text text-muted">{{ field.help_text }}</small>{% endif %}
+                                {% for error in field.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+                            </div>
+                        {% endfor %}
+                        <div class="mt-4">
+                            <button type="submit" class="btn btn-danger w-100">
+                                <i class="fas fa-exclamation-triangle me-2"></i>Prediksi Risiko Sekarang
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                <div class="col-lg-6">
+                    <h5 class="mb-3">Hasil Prediksi</h5>
+                    {% if prediction_status is not None %}
+                        <div class="alert {% if prediction_status == 'Berisiko Tinggi' %}alert-danger{% else %}alert-success{% endif %}" role="alert">
+                            <h4 class="alert-heading">Status: {{ prediction_status }}</h4>
+                            {% if prediction_proba is not None %}
+                                <p>Probabilitas Berisiko: {{ prediction_proba }}%</p>
+                            {% endif %}
+                            <hr>
+                            <p class="mb-0">Berdasarkan data yang Anda masukkan.</p>
+                        </div>
+
+                        <h6>Detail Input:</h6>
+                        <ul class="list-group list-group-flush mb-3">
+                            {% for key, value in input_details.items %}
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    {# MODIFIKASI DI SINI untuk menggunakan filter baru #}
+                                    {{ form|get_field_label:key }}
+                                    <span class="badge bg-secondary rounded-pill">{{ value|default:"-" }}</span>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                        
+                        {% if shap_plot_html %}
+                            <h6 class="mt-4">Penjelasan Faktor Risiko (SHAP):</h6>
+                            <div class="shap-explanation-container p-3 border rounded bg-light">
+                                <script type="text/javascript">
+                                    // Inisialisasi SHAP JS jika belum ada di base template
+                                    // if (typeof shap !== 'undefined' && typeof shap.initjs === 'function') {
+                                    //    shap.initjs();
+                                    // }
+                                </script>
+                                {{ shap_plot_html|safe }}
+                            </div>
+                        {% endif %}
+
+                    {% else %}
+                        <div class="alert alert-light text-center" role="alert">
+                            Hasil prediksi akan muncul di sini setelah Anda mengirimkan data.
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .invalid-feedback.d-block { font-size: 0.875em; color: #dc3545; } /* Warna error Bootstrap */
+    .shap-plot svg { /* Styling untuk SVG SHAP jika perlu */
+        max-width: 100%;
+        height: auto;
+    }
+    .shap-explanation-container {
+        overflow-x: auto; /* Memungkinkan scroll horizontal jika plot SHAP lebar */
+    }
+</style>
+{% endblock %}

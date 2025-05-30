@@ -1,0 +1,157 @@
+{% extends "fedst7_app/base.html" %} {# Sesuaikan dengan path base template Anda #}
+{% load static %}
+
+{% block title %}{{ use_case_title|default:"Prediksi Karir" }}{% endblock %}
+
+{% block content %}
+<div class="container mt-5 mb-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8 col-xl-7">
+      
+      <div class="card shadow-sm mb-4">
+        <div class="card-header bg-purple text-white"> {# Warna baru untuk use case Nada #}
+          <h2 class="card-title mb-0 text-center">{{ use_case_title }}</h2>
+        </div>
+        <div class="card-body p-4">
+          <p class="text-muted">
+            Masukkan informasi akademik Anda untuk mendapatkan rekomendasi karir yang mungkin cocok.
+            Model ini akan menganalisis hingga 3 mata kuliah utama Anda beserta performanya.
+          </p>
+          <hr>
+
+          <form method="post" action="{% url 'usecase_nada:predict_career' %}">
+            {% csrf_token %}
+            
+            <h5 class="mt-3">Informasi Umum</h5>
+            <div class="row">
+                <div class="col-md-12 mb-3"> {# Ubah ke col-md-12 untuk nama jika diinginkan #}
+                    {{ form.nama_mahasiswa.label_tag }}
+                    {{ form.nama_mahasiswa }}
+                    {% if form.nama_mahasiswa.errors %}<div class="invalid-feedback d-block">{{ form.nama_mahasiswa.errors|first }}</div>{% endif %}
+                </div>
+                <div class="col-md-6 mb-3">
+                    {{ form.gender.label_tag }}
+                    {{ form.gender }}
+                    {% if form.gender.errors %}<div class="invalid-feedback d-block">{{ form.gender.errors|first }}</div>{% endif %}
+                </div>
+                <div class="col-md-6 mb-3">
+                    {{ form.student_dept_id.label_tag }}
+                    {{ form.student_dept_id }}
+                    {% if form.student_dept_id.errors %}<div class="invalid-feedback d-block">{{ form.student_dept_id.errors|first }}</div>{% endif %}
+                </div>
+            </div>
+            <hr>
+
+            <h5 class="mt-4">Mata Kuliah Utama ke-1</h5>
+            <div class="row">
+                <div class="col-md-12 mb-3">
+                    {{ form.course_id_1.label_tag }}
+                    {{ form.course_id_1 }}
+                    {% if form.course_id_1.errors %}<div class="invalid-feedback d-block">{{ form.course_id_1.errors|first }}</div>{% endif %}
+                </div>
+                <div class="col-md-6 mb-3">
+                    {{ form.grade_c1.label_tag }}
+                    {{ form.grade_c1 }}
+                    {% if form.grade_c1.errors %}<div class="invalid-feedback d-block">{{ form.grade_c1.errors|first }}</div>{% endif %}
+                </div>
+                <div class="col-md-6 mb-3">
+                    {{ form.attendance_c1.label_tag }}
+                    {{ form.attendance_c1 }}
+                    {% if form.attendance_c1.errors %}<div class="invalid-feedback d-block">{{ form.attendance_c1.errors|first }}</div>{% endif %}
+                </div>
+            </div>
+            <hr>
+            
+            <h5 class="mt-4">Mata Kuliah Utama ke-2 (Opsional)</h5>
+              <div class="row">
+                <div class="col-md-12 mb-3">
+                    {{ form.course_id_2.label_tag }}
+                    {{ form.course_id_2 }}
+                    {% if form.course_id_2.errors %}<div class="invalid-feedback d-block">{{ form.course_id_2.errors|first }}</div>{% endif %}
+                </div>
+                <div class="col-md-6 mb-3">
+                    {{ form.grade_c2.label_tag }}
+                    {{ form.grade_c2 }}
+                    {% if form.grade_c2.errors %}<div class="invalid-feedback d-block">{{ form.grade_c2.errors|first }}</div>{% endif %}
+                </div>
+                <div class="col-md-6 mb-3">
+                    {{ form.attendance_c2.label_tag }}
+                    {{ form.attendance_c2 }}
+                    {% if form.attendance_c2.errors %}<div class="invalid-feedback d-block">{{ form.attendance_c2.errors|first }}</div>{% endif %}
+                </div>
+            </div>
+            <hr>
+
+            <h5 class="mt-4">Mata Kuliah Utama ke-3 (Opsional)</h5>
+            <div class="row">
+                <div class="col-md-12 mb-3">
+                    {{ form.course_id_3.label_tag }}
+                    {{ form.course_id_3 }}
+                    {% if form.course_id_3.errors %}<div class="invalid-feedback d-block">{{ form.course_id_3.errors|first }}</div>{% endif %}
+                </div>
+                <div class="col-md-6 mb-3">
+                    {{ form.grade_c3.label_tag }}
+                    {{ form.grade_c3 }}
+                    {% if form.grade_c3.errors %}<div class="invalid-feedback d-block">{{ form.grade_c3.errors|first }}</div>{% endif %}
+                </div>
+                <div class="col-md-6 mb-3">
+                    {{ form.attendance_c3.label_tag }}
+                    {{ form.attendance_c3 }}
+                    {% if form.attendance_c3.errors %}<div class="invalid-feedback d-block">{{ form.attendance_c3.errors|first }}</div>{% endif %}
+                </div>
+            </div>
+            
+            <div class="d-grid mt-4">
+              <button type="submit" class="btn btn-purple btn-lg text-white"> {# Tombol baru #}
+                <i class="fas fa-briefcase me-2"></i>Prediksi Karir Saya
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      {% if request.method == 'POST' %}
+        {% if error_message %}
+          <div class="alert alert-danger mt-4">
+            <h5 class="alert-heading">Gagal Melakukan Prediksi</h5><hr>
+            <p class="mb-0">{{ error_message }}</p>
+          </div>
+        {% elif prediction_result %}
+          <div class="card shadow-lg mt-4">
+            <div class="card-header bg-success text-white text-center">
+              <h2 class="card-title mb-0">Rekomendasi Karir untuk Anda</h2>
+            </div>
+            <div class="card-body p-4">
+              {% if nama_mahasiswa_display %} {# Menggunakan variabel context baru #}
+                 <h3 class="text-center mb-3">Halo, <strong>{{ nama_mahasiswa_display }}</strong>!</h3>
+              {% endif %}
+              <h4 class="text-center mb-3">Karir yang Paling Direkomendasikan:</h4>
+              <h1 class="display-4 fw-bold text-success text-center mb-4">{{ top_prediction.career }}</h1>
+              <p class="text-center text-muted">Dengan tingkat kecocokan (probabilitas) sekitar <strong>{{ top_prediction.probability }}%</strong></p>
+              
+              {% if career_probabilities|length > 1 %}
+                <hr class="my-4">
+                <h5 class="text-center mb-3">Alternatif Karir Lainnya (dengan probabilitas):</h5>
+                <ul class="list-group list-group-flush">
+                  {% for item in career_probabilities|slice:"1:4" %} {# Tampilkan 3 alternatif teratas #}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                      {{ item.career }}
+                      <span class="badge bg-info-subtle text-info-emphasis rounded-pill">{{ item.probability }}%</span>
+                    </li>
+                  {% endfor %}
+                </ul>
+              {% endif %}
+              <p class="text-center text-muted mt-4"><small>Ini adalah rekomendasi berdasarkan model dan data yang Anda masukkan. Pertimbangkan juga minat dan faktor lainnya.</small></p>
+            </div>
+          </div>
+        {% endif %}
+      {% endif %}
+    </div>
+  </div>
+</div>
+<style>
+  .bg-purple { background-color: #6f42c1 !important; } 
+  .btn-purple { background-color: #6f42c1; border-color: #6f42c1; }
+  .btn-purple:hover { background-color: #5a359a; border-color: #5a359a; }
+</style>
+{% endblock %}
